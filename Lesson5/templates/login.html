@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Вход — MineShield{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <a class="back-link" href="{{ url_for('home') }}">← На главную</a>
+  <p class="eyebrow">ЛИЧНЫЙ КАБИНЕТ</p>
+  <h1>С возвращением <span>в мир.</span></h1>
+  <p class="page-intro">Войдите, чтобы редактировать профиль игрока или управлять данными сервера.</p>
+</section>
+<section class="form-panel auth-panel">
+  <form class="site-form" action="{{ url_for('login') }}" method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label>Логин
+      <input name="username" required minlength="3" maxlength="32" autocomplete="username" autofocus>
+    </label>
+    <label>Пароль
+      <input type="password" name="password" required autocomplete="current-password">
+    </label>
+    <button class="button button-primary" type="submit">Войти в аккаунт <span aria-hidden="true">→</span></button>
+  </form>
+  <p class="form-hint">Учетную запись игрока создаёт администратор. Демо-вход администратора указан в README.</p>
+</section>
+{% endblock %}

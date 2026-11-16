@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Избранное — MineShield{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <a class="back-link" href="{{ url_for('players') }}">← Все игроки</a>
+  <p class="eyebrow">03 / СООБЩЕСТВО</p>
+  <h1>Избранные <span>игроки</span></h1>
+  <p class="page-intro">Список хранится только в этом браузере и не требует аккаунта.</p>
+</section>
+<section class="player-results">
+  <div class="results-heading">
+    <h2>Ваш список</h2>
+    <span><span data-favorite-count>0</span> сохранено</span>
+  </div>
+  <div class="player-grid favorite-grid" data-favorites-grid hidden>
+    {% for player in players %}
+    <article class="player-card" data-favorite-player-card="{{ player.id }}">
+      <a class="player-card-link" href="{{ url_for('player_detail', player_id=player.id) }}">
+        <span class="player-avatar">{{ (player.name or "?")[:1] }}</span>
+        <span class="player-card-info">
+          <strong>{{ player.name }}</strong>
+          <span>Сезон {{ player.season_id }} · {{ player.status or "Участник" }}</span>
+        </span>
+        <span class="card-arrow" aria-hidden="true">↗</span>
+      </a>
+      <button class="favorite-toggle" type="button" data-favorite-toggle="{{ player.id }}" data-player-name="{{ player.name }}" aria-pressed="false">☆</button>
+    </article>
+    {% endfor %}
+  </div>
+  <div class="empty-state favorite-empty" data-favorites-empty hidden>
+    <span>☆</span>
+    <h2>Пока ничего нет</h2>
+    <p>Добавьте игрока в избранное со страницы поиска или его карточки.</p>
+    <a class="text-link" href="{{ url_for('players') }}">Найти игрока <span aria-hidden="true">→</span></a>
+  </div>
+  <p class="storage-notice" data-favorites-no-script>Для работы избранного включите JavaScript в браузере.</p>
+</section>
+{% endblock %}

@@ -1,0 +1,20 @@
+[project]
+name = "order-processor-lab"
+version = "0.1.0"
+description = "A small order validation and persistence exercise"
+requires-python = ">=3.12"
+dependencies = ["pydantic[email]>=2.0,<3.0"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "ruff>=0.6"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["ANN", "E", "F", "I"]

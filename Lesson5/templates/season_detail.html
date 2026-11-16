@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Сезон {{ season.id }} — MineShield{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <a class="back-link" href="{{ url_for('seasons') }}">← Все сезоны</a>
+  <p class="eyebrow">02 / ХРОНИКА / СЕЗОН {{ "%02d"|format(season.id) }}</p>
+  <h1>Сезон <span>{{ season.id }}</span></h1>
+  <p class="page-intro">{{ season.history_text }}</p>
+</section>
+<section class="section-block season-players">
+  <div class="section-heading">
+    <div><p class="eyebrow">СООБЩЕСТВО</p><h2>Участники сезона</h2></div>
+    <a class="text-link" href="{{ url_for('players') }}">Все игроки <span aria-hidden="true">→</span></a>
+  </div>
+  <div class="player-grid">
+    {% for player in players %}
+    <article class="player-card">
+      <a class="player-card-link" href="{{ url_for('player_detail', player_id=player.id) }}">
+        <span class="player-avatar">{{ (player.name or "?")[:1] }}</span>
+        <span class="player-card-info"><strong>{{ player.name }}</strong><span>{{ player.status or "Участник" }}</span></span>
+        <span class="card-arrow" aria-hidden="true">↗</span>
+      </a>
+      <button class="favorite-toggle" type="button" data-favorite-toggle="{{ player.id }}" data-player-name="{{ player.name }}" aria-pressed="false">☆</button>
+    </article>
+    {% else %}
+    <div class="empty-state"><span>⌁</span><h2>Участников пока нет</h2><p>Карточки игроков этого сезона появятся здесь.</p></div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

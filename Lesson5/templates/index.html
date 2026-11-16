@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}MineShield — история сервера и игроки{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="hero-copy">
+    <p class="eyebrow"><span class="status-dot"></span> БАЗА ЗНАНИЙ СЕРВЕРА</p>
+    <h1>История мира.<br><span>Люди, которые его строят.</span></h1>
+    <p class="hero-description">Следи за сезонами, вспоминай важные события и находи игроков в одном месте.</p>
+    <div class="hero-actions">
+      <a class="button button-primary" href="{{ url_for('seasons') }}">Исследовать сезоны <span aria-hidden="true">→</span></a>
+      <a class="button button-secondary" href="{{ url_for('players') }}">Найти игрока</a>
+    </div>
+    <div class="hero-stats">
+      <div><strong>{{ seasons|length }}</strong><span>сезона</span></div>
+      <div><strong>{{ player_count }}</strong><span>игрока</span></div>
+      <div><strong>1</strong><span>общая история</span></div>
+    </div>
+  </div>
+</section>
+
+{% if announcements %}
+<section class="section-block announcements-section">
+  <div class="section-heading">
+    <div><p class="eyebrow">СООБЩЕСТВО</p><h2>Новости игроков</h2></div>
+    <span class="section-subtitle">Объявления участников сервера</span>
+  </div>
+  <div class="announcement-list">
+    {% for announcement in announcements %}
+    <article class="announcement-card">
+      <div class="announcement-meta"><strong>{{ announcement.name }}</strong><time>{{ announcement.created_at }}</time></div>
+      <p>{{ announcement.text }}</p>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<section class="section-block">
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow">НАВИГАЦИЯ</p>
+      <h2>Всё важное — рядом</h2>
+    </div>
+    <p class="section-subtitle">Выбери, с чего начать.</p>
+  </div>
+  <div class="feature-grid">
+    <a class="feature-card" href="{{ url_for('history') }}">
+      <span class="feature-number">01 / ЛЕТОПИСЬ</span>
+      <span class="feature-icon">◷</span>
+      <h3>История сервера</h3>
+      <p>Как появился наш мир и чем он живёт.</p>
+      <span class="card-arrow" aria-hidden="true">↗</span>
+    </a>
+    <a class="feature-card" href="{{ url_for('seasons') }}">
+      <span class="feature-number">02 / ХРОНИКА</span>
+      <span class="feature-icon">▦</span>
+      <h3>Сезоны</h3>
+      <p>События, участники и главы истории.</p>
+      <span class="card-arrow" aria-hidden="true">↗</span>
+    </a>
+    <a class="feature-card" href="{{ url_for('players') }}">
+      <span class="feature-number">03 / СООБЩЕСТВО</span>
+      <span class="feature-icon">⌕</span>
+      <h3>Игроки</h3>
+      <p>Найди участника и открой его карточку.</p>
+      <span class="card-arrow" aria-hidden="true">↗</span>
+    </a>
+  </div>
+</section>
+
+<section class="section-block season-preview">
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow">ПРОДОЛЖИ ИССЛЕДОВАНИЕ</p>
+      <h2>Архив сезонов</h2>
+    </div>
+    <a class="text-link" href="{{ url_for('seasons') }}">Все сезоны <span aria-hidden="true">→</span></a>
+  </div>
+  <div class="season-strip">
+    {% for season in seasons %}
+    <a class="season-tile" href="{{ url_for('season_detail', season_id=season.id) }}">
+      <span>СЕЗОН</span><strong>{{ "%02d"|format(season.id) }}</strong><span class="tile-arrow" aria-hidden="true">↗</span>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

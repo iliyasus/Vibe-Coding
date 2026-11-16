@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}История сервера — MineShield{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <a class="back-link" href="{{ url_for('home') }}">← На главную</a>
+  <p class="eyebrow">01 / ЛЕТОПИСЬ</p>
+  <h1>История <span>сервера</span></h1>
+  <p class="page-intro">История мира MineShield — от первых блоков до сегодняшнего дня.</p>
+</section>
+<section class="content-panel story-panel">
+  <span class="panel-label"><span class="status-dot"></span> ХРОНИКА MINE SHIELD</span>
+  <div class="story-text">{{ history_text }}</div>
+</section>
+<section class="next-step">
+  <div><p class="eyebrow">ДАЛЬШЕ ПО ХРОНИКЕ</p><h2>Посмотреть сезоны</h2></div>
+  <a class="button button-primary" href="{{ url_for('seasons') }}">К архиву сезонов <span aria-hidden="true">→</span></a>
+</section>
+{% endblock %}

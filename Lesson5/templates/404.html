@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Страница не найдена — MineShield{% endblock %}
+{% block content %}
+<section class="not-found">
+  <p class="eyebrow">404 / НЕ НАЙДЕНО</p>
+  <h1>Кажется, этот блок <span>потерялся.</span></h1>
+  <p>Такой страницы нет. Вернись на главную или продолжи исследовать сервер.</p>
+  <a class="button button-primary" href="{{ url_for('home') }}">На главную <span aria-hidden="true">→</span></a>
+</section>
+{% endblock %}

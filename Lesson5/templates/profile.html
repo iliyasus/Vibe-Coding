@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Мой профиль — MineShield{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <a class="back-link" href="{{ url_for('home') }}">← На главную</a>
+  <p class="eyebrow">ЛИЧНЫЙ КАБИНЕТ / {{ current_user.username }}</p>
+  <h1>Мой <span>профиль</span></h1>
+  {% if player %}
+  <p class="page-intro">Карточка игрока {{ player.name }} · сезон {{ player.season_id }}.</p>
+  {% else %}
+  <p class="page-intro">Аккаунт создан, но карточка игрока ещё не привязана. Попросите администратора назначить карточку.</p>
+  {% endif %}
+</section>
+{% if player %}
+<section class="form-panel profile-edit-panel">
+  <h2>Описание карточки</h2>
+  <form class="site-form" action="{{ url_for('profile') }}" method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label>Расскажите о себе
+      <textarea name="info" rows="5" maxlength="2000">{{ player.info or "" }}</textarea>
+    </label>
+    <button class="button button-primary" type="submit">Сохранить описание</button>
+  </form>
+  <a class="text-link" href="{{ url_for('player_detail', player_id=player.id) }}">Посмотреть публичную карточку <span aria-hidden="true">→</span></a>
+</section>
+<section class="form-panel profile-edit-panel">
+  <p class="eyebrow">ОПОВЕСТИТЬ СООБЩЕСТВО</p>
+  <h2>Опубликовать объявление</h2>
+  <p class="form-hint">Объявление появится в новостях на главной странице сайта.</p>
+  <form class="site-form" action="{{ url_for('create_announcement') }}" method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label>Текст объявления
+      <textarea name="text" rows="3" maxlength="500" required placeholder="Например: Начал стрим, присоединяйтесь!"></textarea>
+    </label>
+    <button class="button button-secondary" type="submit">Опубликовать объявление</button>
+  </form>
+</section>
+{% endif %}
+{% endblock %}

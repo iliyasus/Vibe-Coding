@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Игроки — MineShield{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <a class="back-link" href="{{ url_for('home') }}">← На главную</a>
+  <p class="eyebrow">03 / СООБЩЕСТВО</p>
+  <h1>Найти <span>своих</span></h1>
+  <p class="page-intro">Ищи участника по имени или открой карточку из списка.</p>
+</section>
+<section class="search-panel">
+  <form class="search-form" action="{{ url_for('players') }}" method="get">
+    <label class="sr-only" for="player-search">Имя игрока</label>
+    <span class="search-icon" aria-hidden="true">⌕</span>
+    <input id="player-search" name="q" value="{{ query }}" placeholder="Например, Луна" autocomplete="off">
+    {% if query %}<a class="clear-search" href="{{ url_for('players') }}" aria-label="Очистить поиск">×</a>{% endif %}
+    <button class="button button-primary" type="submit">Найти</button>
+  </form>
+</section>
+<section class="player-results">
+  <div class="results-heading">
+    <h2>{% if searched %}Результаты поиска{% else %}Все игроки{% endif %}</h2>
+    <div class="results-actions">
+      <a class="text-link" href="{{ url_for('favorites') }}">Избранное <span aria-hidden="true">→</span></a>
+      <span>{{ players|length }} найдено</span>
+    </div>
+  </div>
+  <div class="player-grid">
+    {% for player in players %}
+    <article class="player-card">
+      <a class="player-card-link" href="{{ url_for('player_detail', player_id=player.id) }}">
+        <span class="player-avatar">{{ (player.name or "?")[:1] }}</span>
+        <span class="player-card-info">
+          <strong>{{ player.name }}</strong>
+          <span>Сезон {{ player.season_id }} · {{ player.status or "Участник" }}</span>
+        </span>
+        <span class="card-arrow" aria-hidden="true">↗</span>
+      </a>
+      <button class="favorite-toggle" type="button" data-favorite-toggle="{{ player.id }}" data-player-name="{{ player.name }}" aria-pressed="false">☆</button>
+    </article>
+    {% else %}
+    <div class="empty-state">
+      <span>{% if searched %}⌕{% else %}⌁{% endif %}</span>
+      <h2>{% if searched %}Никого не нашли{% else %}Карточек пока нет{% endif %}</h2>
+      <p>{% if searched %}Попробуй изменить запрос или проверь написание имени.{% else %}Когда появятся карточки, их можно будет найти здесь.{% endif %}</p>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

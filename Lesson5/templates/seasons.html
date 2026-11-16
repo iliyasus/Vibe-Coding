@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Сезоны — MineShield{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <a class="back-link" href="{{ url_for('home') }}">← На главную</a>
+  <p class="eyebrow">02 / ХРОНИКА</p>
+  <h1>Главы <span>нашего мира</span></h1>
+  <p class="page-intro">Выбери сезон, чтобы прочитать историю и увидеть список участников.</p>
+</section>
+<section class="season-list">
+  {% for season in seasons %}
+  <a class="season-row" href="{{ url_for('season_detail', season_id=season.id) }}">
+    <span class="season-row-index">0{{ season.id }}</span>
+    <span class="season-row-copy"><strong>Сезон {{ season.id }}</strong><span>{{ season.history_text }}</span></span>
+    <span class="season-row-arrow" aria-hidden="true">↗</span>
+  </a>
+  {% else %}
+  <div class="empty-state"><span>▦</span><h2>Сезонов пока нет</h2><p>Загляни позже — здесь появится история сервера.</p></div>
+  {% endfor %}
+</section>
+{% endblock %}

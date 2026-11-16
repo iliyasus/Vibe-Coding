@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% block title %}Управление сервером — MineShield{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <a class="back-link" href="{{ url_for('home') }}">← На главную</a>
+  <p class="eyebrow">MINE SHIELD / АДМИНИСТРИРОВАНИЕ</p>
+  <h1>Панель <span>управления</span></h1>
+  <p class="page-intro">Редактируйте летопись, сезоны, учётные записи и карточки игроков.</p>
+</section>
+
+<section class="admin-section form-panel">
+  <p class="eyebrow">01 / ЛЕТОПИСЬ</p>
+  <h2>История сервера</h2>
+  <form class="site-form" action="{{ url_for('update_history') }}" method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label>Текст истории
+      <textarea name="text" rows="5" maxlength="10000" required>{{ history_text }}</textarea>
+    </label>
+    <button class="button button-primary" type="submit">Сохранить историю</button>
+  </form>
+</section>
+
+<section class="admin-section form-panel">
+  <p class="eyebrow">02 / ХРОНИКА</p>
+  <h2>История сезонов</h2>
+  <div class="admin-grid">
+    {% for season in seasons %}
+    <form class="site-form nested-form" action="{{ url_for('update_season', season_id=season.id) }}" method="post">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <label>Сезон {{ season.id }}
+        <textarea name="history_text" rows="3" maxlength="5000" required>{{ season.history_text }}</textarea>
+      </label>
+      <button class="button button-secondary" type="submit">Сохранить сезон</button>
+    </form>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="admin-section form-panel">
+  <p class="eyebrow">03 / ДОСТУП</p>
+  <h2>Создать аккаунт игрока</h2>
+  <form class="site-form form-inline" action="{{ url_for('create_player_account') }}" method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label>Логин
+      <input name="username" required minlength="3" maxlength="32" autocomplete="off">
+    </label>
+    <label>Пароль
+      <input type="password" name="password" required minlength="8" maxlength="128" autocomplete="new-password">
+    </label>
+    <button class="button button-primary" type="submit">Создать аккаунт</button>
+  </form>
+  <p class="form-hint">После создания аккаунта добавьте карточку и привяжите к ней логин. Пароли хранятся в защищённом виде и не отображаются; при необходимости задайте игроку новый пароль ниже.</p>
+</section>
+
+<section class="admin-section form-panel">
+  <p class="eyebrow">04 / УПРАВЛЕНИЕ ДОСТУПОМ</p>
+  <h2>Аккаунты игроков</h2>
+  <div class="admin-card-list">
+    {% for account in accounts %}
+    <details class="admin-player">
+      <summary><span>{{ account.username }}</span><span>Аккаунт игрока</span></summary>
+      <form class="site-form form-inline" action="{{ url_for('reset_player_account_password', username=account.username) }}" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <label>Новый пароль
+          <input type="password" name="new_password" required minlength="8" maxlength="128" autocomplete="new-password">
+        </label>
+        <label>Повторите пароль
+          <input type="password" name="confirmation" required minlength="8" maxlength="128" autocomplete="new-password">
+        </label>
+        <button class="button button-secondary" type="submit">Задать новый пароль</button>
+      </form>
+      <form class="delete-form" action="{{ url_for('delete_player_account', username=account.username) }}" method="post" onsubmit="return confirm('Удалить аккаунт? Карточка игрока останется, но будет отвязана от аккаунта.')">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="button button-danger" type="submit">Удалить аккаунт</button>
+      </form>
+    </details>
+    {% else %}
+    <div class="empty-state"><h2>Аккаунтов пока нет</h2><p>Создайте первый аккаунт выше.</p></div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="admin-section form-panel">
+  <p class="eyebrow">05 / СООБЩЕСТВО</p>
+  <h2>Создать карточку игрока</h2>
+  <form class="site-form admin-grid" action="{{ url_for('create_player_card') }}" method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label>Имя игрока
+      <input name="name" required maxlength="80">
+    </label>
+    <label>Сезон
+      <select name="season_id" required>
+        {% for season in seasons %}<option value="{{ season.id }}">Сезон {{ season.id }}</option>{% endfor %}
+      </select>
+    </label>
+    <label>Статус
+      <input name="status" maxlength="80" placeholder="Участник">
+    </label>
+    <label>Привязать аккаунт
+      <select name="linked_account">
+        <option value="">Не привязывать</option>
+        {% for account in accounts %}<option value="{{ account.username }}">{{ account.username }}</option>{% endfor %}
+      </select>
+    </label>
+    <label class="full-width">Описание
+      <textarea name="info" rows="3" maxlength="2000"></textarea>
+    </label>
+    <button class="button button-primary" type="submit">Создать карточку</button>
+  </form>
+</section>
+
+<section class="admin-section">
+  <div class="section-heading"><div><p class="eyebrow">06 / УПРАВЛЕНИЕ</p><h2>Карточки игроков</h2></div><span class="section-subtitle">{{ players|length }} карточек</span></div>
+  <div class="admin-card-list">
+    {% for player in players %}
+    <details class="admin-player">
+      <summary><span>{{ player.name }}</span><span>Сезон {{ player.season_id }} · {{ player.linked_account or "без аккаунта" }}</span></summary>
+      <form class="site-form admin-grid" action="{{ url_for('update_player_card', player_id=player.id) }}" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <label>Имя<input name="name" value="{{ player.name }}" required maxlength="80"></label>
+        <label>Сезон
+          <select name="season_id" required>
+            {% for season in seasons %}<option value="{{ season.id }}" {% if season.id == player.season_id %}selected{% endif %}>Сезон {{ season.id }}</option>{% endfor %}
+          </select>
+        </label>
+        <label>Статус<input name="status" value="{{ player.status or '' }}" maxlength="80"></label>
+        <label class="full-width">Описание<textarea name="info" rows="3" maxlength="2000">{{ player.info or '' }}</textarea></label>
+        <button class="button button-secondary" type="submit">Сохранить карточку</button>
+      </form>
+      <form class="delete-form" action="{{ url_for('delete_player_card', player_id=player.id) }}" method="post" onsubmit="return confirm('Удалить карточку игрока?')">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="button button-danger" type="submit">Удалить карточку</button>
+      </form>
+    </details>
+    {% else %}
+    <div class="empty-state"><h2>Карточек пока нет</h2><p>Создайте первую карточку выше.</p></div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

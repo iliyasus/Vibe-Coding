@@ -1,0 +1,42 @@
+# Python 3.12 bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.pytype/
+.coverage
+.coverage.*
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Environment variables and local secrets
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Local databases
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.sqlite-journal
+*.sqlite-wal
+*.sqlite-shm
+
+# Build and packaging output
+build/
+dist/
+*.egg-info/
+
+# VS Code workspace state (keep shareable project settings)
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json

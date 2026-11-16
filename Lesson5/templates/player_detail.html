@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}{{ player.name }} — MineShield{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <a class="back-link" href="{{ url_for('players') }}">← Все игроки</a>
+  <p class="eyebrow">03 / СООБЩЕСТВО / КАРТОЧКА ИГРОКА</p>
+</section>
+<section class="profile-panel">
+  <div class="profile-avatar">{{ (player.name or "?")[:1] }}</div>
+  <div class="profile-content">
+    <span class="profile-status"><span class="status-dot"></span>{{ player.status or "Участник" }}</span>
+    <h1>{{ player.name }}</h1>
+    <a class="profile-season" href="{{ url_for('season_detail', season_id=player.season_id) }}">Участник {{ player.season_id }} сезона <span aria-hidden="true">↗</span></a>
+    <button class="favorite-toggle profile-favorite" type="button" data-favorite-toggle="{{ player.id }}" data-player-name="{{ player.name }}" aria-pressed="false">☆ Добавить в избранное</button>
+    <div class="profile-divider"></div>
+    <p class="eyebrow">ОБ ИГРОКЕ</p>
+    <p class="profile-description">{{ player.info or "Описание пока не добавлено." }}</p>
+    {% if current_user and current_user.role == 'admin' %}
+    <a class="text-link admin-card-link" href="{{ url_for('admin') }}">Редактировать карточку <span aria-hidden="true">→</span></a>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

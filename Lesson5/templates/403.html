@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Доступ запрещён — MineShield{% endblock %}
+{% block content %}
+<section class="not-found">
+  <p class="eyebrow">403 / НЕДОСТАТОЧНО ПРАВ</p>
+  <h1>Этот раздел <span>закрыт.</span></h1>
+  <p>Для этой страницы нужна другая роль аккаунта.</p>
+  <a class="button button-primary" href="{{ url_for('home') }}">На главную <span aria-hidden="true">→</span></a>
+</section>
+{% endblock %}
