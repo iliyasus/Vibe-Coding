@@ -1,6 +1,8 @@
 import json
 import os
+
 from models import Book
+
 
 class JSONStorage:
     def __init__(self, filename="books.json"):

@@ -1,10 +1,9 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from uuid import uuid4
 
+import storage
 from fastapi import FastAPI, HTTPException, status
 from pydantic import BaseModel, Field
-
-import storage
 
 storage.init_storage()
 
@@ -29,7 +28,7 @@ async def create_note(note_data: NoteCreate):
         "id": str(uuid4()),
         "title": note_data.title,
         "text": note_data.text,
-        "created_at": datetime.now(timezone.utc).isoformat(),
+        "created_at": datetime.now(UTC).isoformat(),
     }
     await storage.add_note(new_note)
     return new_note
@@ -52,4 +51,3 @@ async def get_note(note_id: str):
 async def delete_note(note_id: str):
     if not await storage.delete_note(note_id):
         raise HTTPException(status_code=404, detail="Заметка не найдена")
-    return None

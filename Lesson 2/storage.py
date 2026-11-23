@@ -1,6 +1,8 @@
 import json
 import os
+
 from models import Book
+
 
 class JSONStorage:
     def __init__(self, filename="books.json"):
@@ -20,8 +22,8 @@ class JSONStorage:
         with open(self.filename, 'w', encoding='utf-8') as f:
             json.dump([book.to_dict() for book in books], f, ensure_ascii=False, indent=4)
 Файл: main.py
-from models import Book
 from storage import JSONStorage
+
 
 def main():
     storage = JSONStorage()

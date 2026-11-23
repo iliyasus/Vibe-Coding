@@ -1,12 +1,13 @@
 from __future__ import annotations
 
-import os
 import hmac
+import os
 import secrets
 import sqlite3
+from collections.abc import Callable
 from functools import wraps
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 
 from flask import (
     Flask,

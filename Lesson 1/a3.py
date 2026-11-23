@@ -1,5 +1,6 @@
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
+
 
 def rename_files(folder_path):
     # Преобразуем строку в объект Path

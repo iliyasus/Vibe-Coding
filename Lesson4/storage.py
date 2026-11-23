@@ -3,7 +3,6 @@ import json
 from pathlib import Path
 from typing import Any
 
-
 NOTES_FILE = Path(__file__).resolve().with_name("notes.json")
 _file_lock = asyncio.Lock()
 

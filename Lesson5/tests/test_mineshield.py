@@ -38,7 +38,7 @@ def test_home_shows_site_navigation_and_demo_data(monkeypatch, tmp_path):
     response = client.get("/")
 
     assert response.status_code == 200
-    assert "MineShield".encode() in response.data
+    assert b"MineShield" in response.data
     assert "Архив сезонов".encode() in response.data
     assert b'class="hero-art"' not in response.data
 
@@ -423,7 +423,7 @@ def test_admin_can_reset_player_password_without_exposing_hash(monkeypatch, tmp_
     assert stored_password.startswith("scrypt:")
     assert mineshield.authenticate("player-one", "updated-pass-1")
     assert not mineshield.authenticate("player-one", "player-pass-1")
-    assert "updated-pass-1".encode() not in client.get("/admin").data
+    assert b"updated-pass-1" not in client.get("/admin").data
 
 
 def test_admin_can_delete_player_account_and_keep_card(monkeypatch, tmp_path):

@@ -1,5 +1,6 @@
 import re
 
+
 def get_email_validation_errors(email: str) -> list[str]:
     """
     Проверяет email и возвращает список причин, почему он невалиден.
